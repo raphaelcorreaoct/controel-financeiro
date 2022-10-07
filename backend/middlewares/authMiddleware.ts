@@ -1,6 +1,5 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import admin from "firebase-admin";
-import { Connect } from "../repository/Connect";
 
 export const authMiddleware = async (
   req: NextApiRequest,

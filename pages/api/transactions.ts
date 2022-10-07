@@ -15,14 +15,22 @@ export default function handler(
   authMiddleware(req, res, (req, res) => {
     const transactions = new TransactionsController();
 
-    if (req.method === "GET") {
-      try {
+    switch (req.method) {
+      case "GET":
         return transactions.findByUserId(req, res);
-      } catch {
-        return res.status(400).json({ message: "Erro" });
-      }
+        break;
+      case "POST":
+        return transactions.create(req, res);
+        break;
+      case "PUT":
+        return transactions.update(req, res);
+        break;
+      case "DELETE":
+        return transactions.delete(req, res);
+        break;
+      default:
+        return res.status(405).json({ message: "Method not allowed" });
+        break;
     }
-
-    return res.status(404).json({ message: "Not Found" });
   });
 }
