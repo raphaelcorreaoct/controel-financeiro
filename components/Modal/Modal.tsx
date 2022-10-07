@@ -28,7 +28,7 @@ export default function Modal({
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = () => {
     // e.preventDefault();
     console.log(fields);
   };
