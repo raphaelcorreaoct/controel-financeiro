@@ -1,5 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import firebaseAdmin from "firebase-admin";
+import admin from "firebase-admin";
+import { Connect } from "../repository/Connect";
 
 export const authMiddleware = async (
   req: NextApiRequest,
@@ -7,16 +8,20 @@ export const authMiddleware = async (
   next: NextApiHandler
 ) => {
   const token = req.headers.authorization;
+
   if (!token) {
-    return res.status(401).json({ message: "Not authorized" });
+    return res.status(401).json({ message: "Token is missing" });
   }
+
   try {
-    const decoded = await firebaseAdmin.auth().verifyIdToken(token, true);
+    // console.log("----------------", token);
+    const decoded = await admin.auth().verifyIdToken(token, true);
     req.query = {
       uid: decoded.uid,
     };
     next(req, res);
   } catch (e) {
-    res.status(401).json({ message: "Not authorized" });
+    console.log("authMiddleware", e);
+    res.status(401).json({ message: "Invalid Token" });
   }
 };

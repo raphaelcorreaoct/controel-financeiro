@@ -40,7 +40,7 @@ const Transactions: NextPage = () => {
       <Header />
       <main className="h-screen">
         <div className="container px-6 py-12 h-full m-auto">
-          <div className="flex-row flex justify-between align-middle my-10">
+          <div className="flex-col md:flex-row flex-row flex justify-between align-middle my-10 ">
             <CurrencyCard label="Saldo atual" value="R$ 1.000,00" />
             <CurrencyCard label="Receita" value="R$ 800,00" />
             <CurrencyCard label="Despesas" value="R$ 800,00" />

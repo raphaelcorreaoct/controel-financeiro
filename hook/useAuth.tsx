@@ -28,6 +28,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (user) {
         setUser(user);
         setLoggedIn(true);
+
+        user.getIdToken().then((token) => {
+          console.log("token", token);
+        });
+
         router.push("/transactions");
       }
       setLoading(false);
