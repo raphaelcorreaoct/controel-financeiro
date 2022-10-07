@@ -5,7 +5,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  updateProfile,
 } from "firebase/auth";
 
 export const loginWithGoogle = async () => {

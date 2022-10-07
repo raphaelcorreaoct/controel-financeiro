@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setLoggedIn(true);
         console.log(user);
         user.getIdToken().then((token) => {
-          console.log("token", token);
+          localStorage.setItem("fb_token", token);
         });
 
         router.push("/transactions");

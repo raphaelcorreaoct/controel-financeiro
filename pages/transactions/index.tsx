@@ -1,39 +1,35 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CurrencyCard from "../../components/Cards/CurrencyCard";
 import Header from "../../components/Header/Header";
 import Modal from "../../components/Modal/Modal";
 import TableRow from "../../components/Table/TableRow";
+import { DataTransactionType } from "../../dataTypes";
+import { useAuth } from "../../hook/useAuth";
 import withPrivatePage from "../../hook/usePrivatePage";
+import { getTransactions } from "../../services/apiService";
 import { PrimaryButton } from "./../../components/Buttons/Buttons";
 
-const MOCK = [
-  {
-    transactionName: "Mercado",
-    category: "Alimentação",
-    value: 100,
-    id: "1",
-  },
-  {
-    transactionName: "Mercado",
-    category: "Alimentação",
-    value: 100,
-    id: "2",
-  },
-  {
-    transactionName: "Mercado",
-    category: "Alimentação",
-    value: 100,
-    id: "3",
-  },
-];
-
-const Transactions: NextPage = () => {
-  const [modalIsOpen, setModalIsOpen] = React.useState(false);
+const Transactions: NextPage<{
+  transactionsList: DataTransactionType[];
+}> = () => {
+  const { user } = useAuth();
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [transactionsList, setTransactionsList] = useState<
+    DataTransactionType[]
+  >([]);
 
   const toggleModal = () => {
     setModalIsOpen(!modalIsOpen);
   };
+
+  useEffect(() => {
+    if (user && typeof window !== "undefined") {
+      getTransactions(user?.uid).then((res) => {
+        // setTransactionsList(res);
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -71,10 +67,13 @@ const Transactions: NextPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {MOCK.map((item, index) => (
+                {transactionsList.map((item, index) => (
                   <TableRow
-                    {...item}
-                    key={`${item.transactionName}__${index}`}
+                    category={item.category}
+                    transactionName={item.description}
+                    value={item.money.value}
+                    id={item.uid}
+                    key={`${item.description}__${index}`}
                   />
                 ))}
               </tbody>
@@ -86,5 +85,20 @@ const Transactions: NextPage = () => {
     </>
   );
 };
+
+/*
+ * TODO: Add a function to get the transactions from the API and pass it to the component as props with server side rendering
+ */
+// export async function getStaticProps() {
+//   const transactionsList = await getTransactions(
+//     "NrjEwaJUSngg337w00gM77AEyR52"
+//   );
+
+//   return {
+//     props: {
+//       transactionsList: transactionsList || [],
+//     },
+//   };
+// }
 
 export default withPrivatePage(Transactions);
